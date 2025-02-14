@@ -6,13 +6,14 @@ import Register from './pages/Register.jsx'
 import Login from './pages/Login.jsx'
 import LandingPage from './pages/LandingPage.jsx'
 
-createRoot(document.getElementById('root')).render(
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<App />} />
-      </Routes>
-    </BrowserRouter>
-)
+createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/home" element={<App />} />
+      <Route path="/LandingPage" element={<LandingPage />} />
+    </Routes>
+  </BrowserRouter>
+);

@@ -13,8 +13,8 @@ const createTask = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
-    const { title, description } = req.body;
-    const task = new Task({ title, description });
+    const { userId, title, description } = req.body;
+    const task = new Task({ userId, title, description });
     await task.save();
     res.status(201).json({ message: "Task Created Successfully" });
   } catch (err) {
@@ -25,6 +25,27 @@ const createTask = async (req, res) => {
 const getTasks = async (req, res) => {
   try {
     const tasks = await Task.find();
+    res.status(200).json({ tasks });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const getTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const task = await Task.findById(id);
+    res.status(200).json({ task });
+  }
+  catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+const getUserTasks = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const tasks = await Task.find({ userId: id });
     res.status(200).json({ tasks });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -70,10 +91,26 @@ const completeTask = async (req, res) => {
   }
 };
 
+const incompleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const task = await Task.findByIdAndUpdate(id, {
+      status: "pending",
+      updated_at: Date.now(),
+    });
+    res.status(200).json({ message: "Marked as incomplete" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   createTask,
   getTasks,
+  getTask,
   updateTask,
   deleteTask,
   completeTask,
+  incompleteTask,
+  getUserTasks,
 };
