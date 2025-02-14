@@ -1,19 +1,27 @@
 const Task = require("../models/Task");
 const express = require("express");
+const { body, validationResult } = require('express-validator');
 
-// create
+const validateTask = [
+  body('title').notEmpty().withMessage('Title is required'),
+  body('description').notEmpty().withMessage('Description is required'),
+];
+
 const createTask = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const { title, description } = req.body;
     const task = new Task({ title, description });
     await task.save();
-    res.status(201).json({ message: "Task Created Successfully"});
+    res.status(201).json({ message: "Task Created Successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// read
 const getTasks = async (req, res) => {
   try {
     const tasks = await Task.find();
@@ -23,7 +31,6 @@ const getTasks = async (req, res) => {
   }
 };
 
-// update
 const updateTask = async (req, res) => {
   try {
     const { title, description, status } = req.body;
@@ -40,7 +47,6 @@ const updateTask = async (req, res) => {
   }
 };
 
-// delete
 const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
@@ -51,7 +57,6 @@ const deleteTask = async (req, res) => {
   }
 };
 
-// mark as completed
 const completeTask = async (req, res) => {
   try {
     const { id } = req.params;

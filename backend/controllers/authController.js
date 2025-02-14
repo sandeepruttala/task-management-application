@@ -1,11 +1,24 @@
-const express = require('express');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const { body, validationResult } = require('express-validator');
 
-dotenv.config();
+const validateRegister = [
+  body('name').notEmpty().withMessage('Name is required'),
+  body('email').isEmail().withMessage('Invalid email'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+];
+
+const validateLogin = [
+  body('email').isEmail().withMessage('Invalid email'),
+  body('password').notEmpty().withMessage('Password is required'),
+];
 
 const register = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { name, email, password } = req.body;
 
   try {
@@ -27,8 +40,12 @@ const register = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { email, password } = req.body;
 
   try {
@@ -50,7 +67,7 @@ const login = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 const sessionCheck = async (req, res) => {
   try {
