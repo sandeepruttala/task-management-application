@@ -52,4 +52,13 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login};
+const sessionCheck = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    res.status(200).json({ id: user._id, name: user.name, email: user.email });
+  } catch (err) {
+    res.status(401).json({ message: err.message });
+  }
+}
+
+module.exports = { register, login, sessionCheck };
