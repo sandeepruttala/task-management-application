@@ -8,6 +8,7 @@ function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,6 +31,7 @@ function Register() {
       );
       return;
     }
+    setLoading(true);
     const response = await fetch(`${SERVER_URL}/auth/register`, {
       method: "POST",
       headers: {
@@ -38,8 +40,8 @@ function Register() {
       body: JSON.stringify(formData),
     });
     const data = await response.json();
+    setLoading(false);
     if (response.ok) {
-      localStorage.setItem("token", data.token);
       navigate("/login");
     } else {
       alert(data.message);
@@ -99,7 +101,9 @@ function Register() {
           </button>
           <div></div>
         </div>
-        <button type="submit">Register</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
+        </button>
       </form>
       <div className="signup-prompt">
         <p>
