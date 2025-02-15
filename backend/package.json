@@ -5,6 +5,9 @@
   "scripts": {
     "test": "NODE_ENV=test jest --detectOpenHandles --testTimeout=10000"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
