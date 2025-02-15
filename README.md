@@ -172,7 +172,6 @@ http://localhost:5173
 - **Component-Based Architecture**: Reusable components for better code organization and maintainability.
 
 ## Additional Notes for Reviewers
-### Additional Notes for Reviewers
 
 - **Testing**: Comprehensive unit and integration tests have been implemented for both the frontend and backend. The backend tests ensure that the API endpoints function correctly, while the frontend tests verify the UI components and user interactions.
 - **API Validation**: All incoming API requests are validated using `Express Validator` to ensure data integrity and prevent malicious input. This includes validation for user registration, login, and task management endpoints.
