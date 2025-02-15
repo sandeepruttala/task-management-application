@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://task-management-application-chi-navy.vercel.app/",
     credentials: true,
   })
 );
