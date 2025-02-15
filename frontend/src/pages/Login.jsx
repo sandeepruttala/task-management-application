@@ -8,6 +8,7 @@ function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,6 +16,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const response = await fetch(`${SERVER_URL}/auth/login`, {
       method: "POST",
       headers: {
@@ -23,6 +25,7 @@ function Login() {
       body: JSON.stringify(formData),
     });
     const data = await response.json();
+    setLoading(false);
     if (response.ok) {
       localStorage.setItem("token", data.token);
       navigate("/home");
@@ -39,8 +42,7 @@ function Login() {
     if (localStorage.getItem("token")) {
       if (confirm("You are already logged in. Do you want to logout?")) {
         localStorage.removeItem("token");
-      } else
-      navigate("/home");
+      } else navigate("/home");
     }
   }, [navigate]);
 
@@ -52,7 +54,7 @@ function Login() {
             <ListTodo color="white" />
           </div>
         </div>
-        <span style= {{color: "#2563eb"}}>TaskMaster </span>
+        <span style={{ color: "#2563eb" }}>TaskMaster </span>
       </div>
 
       <div>
@@ -85,7 +87,9 @@ function Login() {
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
       <div className="signup-prompt">
         <p>

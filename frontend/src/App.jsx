@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-undef */
 import "./App.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SERVER_URL } from "./Config";
-import { LogOut, ListTodo, Plus } from "lucide-react";
+import { LogOut, ListTodo, Plus, Loader2 } from "lucide-react";
 import TaskCard from "./components/TaskCard";
 import {
   Sheet,
@@ -14,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./components/Sheet";
+import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
   const navigate = useNavigate();
@@ -67,6 +67,7 @@ function App() {
   }, [user]);
 
   const fetchTasks = async () => {
+    const toastId = toast.loading('Fetching tasks...');
     try {
       const response = await fetch(`${SERVER_URL}/tasks/user/${user.id}`, {
         headers: {
@@ -78,13 +79,16 @@ function App() {
       if (response.ok) {
         const tasksArray = Array.isArray(data) ? data : data.tasks || [];
         setTasks(tasksArray);
+        toast.success('Tasks fetched successfully', { id: toastId });
       } else {
         console.error("Failed to fetch tasks:", data);
         setTasks([]);
+        toast.error('Failed to fetch tasks', { id: toastId });
       }
     } catch (err) {
       console.error("Error fetching tasks:", err);
       setTasks([]);
+      toast.error('Error fetching tasks', { id: toastId });
     }
   };
 
@@ -96,6 +100,7 @@ function App() {
   const handleAddTask = async () => {
     if (!newTask.title.trim()) return;
 
+    const toastId = toast.loading('Adding new task...');
     try {
       setIsLoading(true);
       const response = await fetch(`${SERVER_URL}/tasks`, {
@@ -116,9 +121,11 @@ function App() {
         setNewTask({ title: "", description: "" });
         setIsOpen(false);
         await fetchTasks();
+        toast.success('Task added successfully', { id: toastId });
       }
     } catch (err) {
       console.error(err);
+      toast.error('Failed to add task', { id: toastId });
     } finally {
       setIsLoading(false);
     }
@@ -134,6 +141,7 @@ function App() {
       return;
     }
 
+    const toastId = toast.loading('Updating task...');
     try {
       setIsLoading(true);
 
@@ -154,12 +162,15 @@ function App() {
         setIsOpen(false);
         setCurrentTask(null);
         setIsUpdateMode(false);
+        toast.success('Task updated successfully', { id: toastId });
       } else {
         const errorData = await response.json();
         console.error("Failed to update task:", errorData);
+        toast.error('Failed to update task', { id: toastId });
       }
     } catch (err) {
       console.error("Error updating task:", err);
+      toast.error('Error updating task', { id: toastId });
     } finally {
       setIsLoading(false);
     }
@@ -173,6 +184,7 @@ function App() {
 
     if (!window.confirm("Are you sure you want to delete this task?")) return;
 
+    const toastId = toast.loading('Deleting task...');
     try {
       const response = await fetch(`${SERVER_URL}/tasks/${taskId}`, {
         method: "DELETE",
@@ -184,25 +196,16 @@ function App() {
 
       if (response.ok) {
         setTasks(tasks.filter((task) => task._id !== taskId));
+        toast.success('Task deleted successfully', { id: toastId });
       } else {
         const error = await response.json();
         console.error("Failed to delete task:", error);
-        alert("Failed to delete task. Please try again.");
+        toast.error('Failed to delete task', { id: toastId });
       }
     } catch (err) {
       console.error("Error deleting task:", err);
-      alert("Error deleting task. Please try again.");
+      toast.error('Error deleting task', { id: toastId });
     }
-  };
-
-  const openUpdateSheet = (task) => {
-    setCurrentTask({
-      ...task,
-      _id: task._id || task.id,
-      id: task.id || task._id,
-    });
-    setIsUpdateMode(true);
-    setIsOpen(true);
   };
 
   const handleStatusChange = async (taskId, newStatus) => {
@@ -211,6 +214,7 @@ function App() {
       return;
     }
 
+    const toastId = toast.loading(`Marking task as ${newStatus}...`);
     try {
       const status = newStatus === "completed" ? "complete" : "incomplete";
       const response = await fetch(`${SERVER_URL}/tasks/${taskId}/${status}`, {
@@ -224,10 +228,22 @@ function App() {
 
       if (response.ok) {
         await fetchTasks();
+        toast.success(`Task marked as ${newStatus}`, { id: toastId });
       }
     } catch (err) {
       console.error(err);
+      toast.error(`Failed to mark task as ${newStatus}`, { id: toastId });
     }
+  };
+
+  const openUpdateSheet = (task) => {
+    setCurrentTask({
+      ...task,
+      _id: task._id || task.id,
+      id: task.id || task._id,
+    });
+    setIsUpdateMode(true);
+    setIsOpen(true);
   };
 
   if (!user) {
@@ -239,6 +255,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <Toaster position="top-right" />
       <header className="app-header">
         <div className="logo-section">
           <div className="logo-icon">
@@ -335,7 +352,6 @@ function App() {
                         } else {
                           handleAddTask();
                         }
-                        // closeSheet();
                       }}
                       className="submit-btn"
                       disabled={isLoading}
