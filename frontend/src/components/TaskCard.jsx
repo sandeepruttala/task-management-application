@@ -5,7 +5,7 @@ import "../styles/TaskCard.css";
 
 const TaskCard = ({ task, onStatusChange, onDelete, onEdit }) => {
   const taskId = task._id || task.id;
-  
+
   const handleCheckboxChange = (e) => {
     const newStatus = e.target.checked ? "completed" : "pending";
     onStatusChange(taskId, newStatus);
@@ -53,11 +53,12 @@ const TaskCard = ({ task, onStatusChange, onDelete, onEdit }) => {
       </div>
       <p className="task-description">{task.description}</p>
       <div className="task-footer">
-        <span className="task-date">
-          Created: {formatDate(task.created_at)}
+        <span className="task-date created">
+          <p className="labels">Created:</p> {formatDate(task.created_at)}
         </span>
         <span className="task-date">
-          Updated: {formatDate(task.updated_at)}
+          <p className="labels">Updated:</p>
+          {formatDate(task.updated_at)}
         </span>
       </div>
     </div>

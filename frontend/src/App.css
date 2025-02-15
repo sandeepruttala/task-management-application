@@ -179,100 +179,6 @@
   padding: 20px 0;
 }
 
-.user-menu {
-  position: relative;
-}
-
-.user-menu-trigger {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border: none;
-  background: none;
-  font-size: 16px;
-  color: #1e293b;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.user-menu-trigger:hover {
-  background-color: #f1f5f9;
-}
-
-.user-icon {
-  width: 24px;
-  height: 24px;
-  color: #2563eb;
-}
-
-.dropdown-icon {
-  color: #64748b;
-  transition: transform 0.2s ease;
-}
-
-.user-menu-trigger:hover .dropdown-icon {
-  transform: rotate(180deg);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 8px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 8px;
-  min-width: 180px;
-  animation: slideDown 0.2s ease;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 16px;
-  border: none;
-  background: none;
-  color: #dc2626;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.dropdown-item:hover {
-  background-color: #fee2e2;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Update existing media queries */
-@media (max-width: 640px) {
-  .user-menu-trigger span {
-    display: none;
-  }
-
-  .user-menu-trigger {
-    padding: 8px;
-  }
-
-  .dropdown-menu {
-    right: -50%;
-  }
-}
-
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -358,9 +264,23 @@
 @media (max-width: 768px) {
   .content-grid {
     grid-template-columns: 1fr;
+    padding: 5px;
   }
 
   .tasks-column {
     margin-bottom: 24px;
+  }
+
+  .tasks-container {
+    gap: 16px;
+    padding: 10px;
+  }
+
+  .column-header h2 {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 12px;
   }
 }

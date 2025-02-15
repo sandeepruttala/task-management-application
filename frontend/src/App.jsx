@@ -19,7 +19,11 @@ function App() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState({ userId: "", title: "", description: "" });
+  const [newTask, setNewTask] = useState({
+    userId: "",
+    title: "",
+    description: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
@@ -70,7 +74,6 @@ function App() {
         },
       });
       const data = await response.json();
-      console.log("Fetched tasks data:", data);
 
       if (response.ok) {
         const tasksArray = Array.isArray(data) ? data : data.tasks || [];
@@ -133,7 +136,6 @@ function App() {
 
     try {
       setIsLoading(true);
-      console.log("Updating task:", currentTask);
 
       const response = await fetch(`${SERVER_URL}/tasks/${taskId}`, {
         method: "PUT",
@@ -152,7 +154,7 @@ function App() {
         setIsOpen(false);
         setCurrentTask(null);
         setIsUpdateMode(false);
-      } else {  
+      } else {
         const errorData = await response.json();
         console.error("Failed to update task:", errorData);
       }
@@ -172,7 +174,6 @@ function App() {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
 
     try {
-      console.log("Deleting task with ID:", taskId);
       const response = await fetch(`${SERVER_URL}/tasks/${taskId}`, {
         method: "DELETE",
         headers: {
@@ -194,16 +195,15 @@ function App() {
     }
   };
 
-const openUpdateSheet = (task) => {
-  console.log("Opening update sheet with task:", task);
-  setCurrentTask({
-    ...task,
-    _id: task._id || task.id,
-    id: task.id || task._id,
-  });
-  setIsUpdateMode(true);
-  setIsOpen(true);
-};
+  const openUpdateSheet = (task) => {
+    setCurrentTask({
+      ...task,
+      _id: task._id || task.id,
+      id: task.id || task._id,
+    });
+    setIsUpdateMode(true);
+    setIsOpen(true);
+  };
 
   const handleStatusChange = async (taskId, newStatus) => {
     if (!taskId) {
@@ -213,7 +213,6 @@ const openUpdateSheet = (task) => {
 
     try {
       const status = newStatus === "completed" ? "complete" : "incomplete";
-      console.log("Updating task status:", taskId, status, newStatus);
       const response = await fetch(`${SERVER_URL}/tasks/${taskId}/${status}`, {
         method: "PATCH",
         headers: {
@@ -351,7 +350,7 @@ const openUpdateSheet = (task) => {
                     </button>
                   </div>
                 </SheetContent>
-              </Sheet>  
+              </Sheet>
             </div>
             <div className="tasks-list">
               {pendingTasks.length > 0 ? (
