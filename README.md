@@ -69,14 +69,16 @@ task-management-application
 │   └── server.js         # Entry point for the backend
 ├── frontend
 │   ├── src
-│   │   ├── components    # Reusable components (TaskList, TaskForm, Navbar, Footer)
-│   │   ├── pages         # Page components (TasksPage, RegisterPage, LoginPage)
-│   │   ├── App.jsx       # Main app component with routing
+│   │   ├── components    # Reusable components
+│   │   ├── pages         # Page components (RegisterPage, LoginPage)
+│   │   ├── styles        # css files
+│   │   ├── App.jsx       # Main app component (Home Page)
+│   │   ├── App.css       # styles for App.jsx
+│   │   ├── Index.css     # styles
+│   │   ├── Config.js     # configuratin files like SERVER_URL, REGEX
 │   │   └── main.jsx      # Entry point for the frontend
-│   └── index.css         # Tailwind CSS styles
-├── .env                  # Environment variables
-├── README.md             # Project documentation
-└── package.json          # Node.js dependencies and scripts
+│   └── index.html        # html file
+└── README.md             # Project documentation
 ```
 
 ## Setup Instructions
@@ -113,6 +115,16 @@ Create a `.env` file in the backend folder and add the following environment var
 MONGO_URI=your_mongodb_uri or (mongodb://localhost:27017/task-manager)
 JWT_SECRET=your_jwt_secret_key
 PORT=3000
+```
+
+Update CORS origins: In server.js, add http://localhost:5173 to the allowed origins:
+
+```bash
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+  })
+);
 ```
 
 Start the backend server:
