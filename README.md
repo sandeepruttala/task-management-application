@@ -30,7 +30,7 @@ Check out the live demo of the application: [Task Management App](https://task-m
 **Hosting Platforms**:
 
 - **Frontend**: Vercel
-- **Backend**: Heroku
+- **Backend**: Render
 
 ## GitHub Repository
 
