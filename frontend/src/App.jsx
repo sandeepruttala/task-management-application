@@ -195,7 +195,7 @@ function App() {
       });
 
       if (response.ok) {
-        setTasks(tasks.filter((task) => task._id !== taskId));
+        setTasks(tasks.filter((task) => task._id !== taskId).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
         toast.success('Task deleted successfully', { id: toastId });
       } else {
         const error = await response.json();
